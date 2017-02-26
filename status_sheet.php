@@ -43,7 +43,7 @@ include 'config.inc';
 							</tr>
 							<tr>
 								<td><b>Task Summary => </b></td>
-								<td><textarea name='task_smmary' id='task_smmary'></textarea></td>
+								<td><textarea name='task_summary' id='task_summary'></textarea></td>
 							</tr>
 							<tr>
 								<td><b>Status => </b></td>
@@ -58,21 +58,35 @@ include 'config.inc';
 							<tr><td><br><input type='submit' name='submit_task' id='submit_task' value='Submit Task'></td></tr>
 						</table>
 					</form>
-				</fieldset>
-				<?php
+					<?php
 					if(isset($_POST['user_story'])){
-						
+						if($_POST['categories']=='nil' || $_POST['status']=='nil'){
+							DIE("You have incorrectly selected either the Category or the status. Please verify your option and try again");
+						}
+						insert(['category','user_story','task_id','task_summary','status','task_owner'],[$_POST['categories'],$_POST['user_story'],$_POST['task_id'],$_POST['task_summary'],$_POST['status'],$_SESSION['name']],'team_task');
+						header('Location: status_sheet.php');
 					}
-				?>
+					?>
+				</fieldset>
 			</div>
 			<div id = 'sec2' style='float: left; width: 65%'>
 			<fieldset><b>Team Task Status:</b>
 				<table border=1 align='center'>
-					<tr><td>User Story</td><td>Task Number</td><td>Task Summary</td><td>Status</td><tr>
+					<tr align='center'><td>User Story</td><td>Task Number</td><td>Task Summary</td><td>Status</td><tr>
+					<?php
+						$row = select_all('team_task',['category','Dev-Ops',]);
+						if(sizeof($row)>0){
+					?>
 					<tr><td align='center' colspan=4><b>Dev-Ops</b></td></tr>
-					<tr>
-						<td>-</td><td>-</td><td>-</td><td>-</td>
-					</tr>
+					<?php
+						for($n=0;$n<sizeof($row);$n++){
+							$detail = $row[$n];
+							echo "<tr align='center'><td>".$detail['user_story']."</td><td>".$detail['task_id']."</td><td align='left'>".$detail['task_summary']."</td><td>[".$detail['status']."]</td></tr>";
+						}
+					?>
+					<?php
+						}
+					?>
 					<tr><td align='center' colspan=4><b>Automation</b></td></tr>
 					<tr>
 						<td>-</td><td>-</td><td>-</td><td>-</td>
