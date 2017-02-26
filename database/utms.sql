@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2017 at 12:33 PM
+-- Generation Time: Feb 26, 2017 at 07:03 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -67,8 +67,10 @@ CREATE TABLE `team_task` (
 --
 
 INSERT INTO `team_task` (`sno`, `category`, `user_story`, `task_id`, `task_summary`, `status`, `task_owner`, `date`) VALUES
-(1, 'Dev-Ops', 'US95677', 'TA232665', 'AT - Infrastructure Rave', 'In-Progress', 'Vivek Khurana', '2017-02-26'),
-(2, 'Dev-Ops', 'US95677', 'TA254494', 'AT - Ansible', 'Complete', 'Vivek Khurana', '2017-02-26');
+(1, 'Dev-Ops', 'US95677', 'TA232665', 'Infrastructure Rave', 'In-Progress', 'Vivek Khurana', '2017-02-26'),
+(3, 'Automation', 'US112638', 'TA225448', 'AT - Automation', 'Complete', 'Vivek Khurana', '2017-02-26'),
+(4, 'Functional', 'US86298', 'TA228784', 'Branch-Testing', 'In-Progress', 'Vivek Khurana', '2017-02-26'),
+(5, 'Automation', 'US112638', 'AT225448', 'AT - Rubocop', 'In-Progress', 'Vivek Khurana', '2017-02-26');
 
 --
 -- Indexes for dumped tables
@@ -94,7 +96,7 @@ ALTER TABLE `team_task`
 -- AUTO_INCREMENT for table `team_task`
 --
 ALTER TABLE `team_task`
-  MODIFY `sno` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `sno` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
