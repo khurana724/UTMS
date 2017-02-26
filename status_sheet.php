@@ -63,38 +63,65 @@ include 'config.inc';
 						if($_POST['categories']=='nil' || $_POST['status']=='nil'){
 							DIE("You have incorrectly selected either the Category or the status. Please verify your option and try again");
 						}
-						insert(['category','user_story','task_id','task_summary','status','task_owner'],[$_POST['categories'],$_POST['user_story'],$_POST['task_id'],$_POST['task_summary'],$_POST['status'],$_SESSION['name']],'team_task');
+						insert(['category','user_story','task_id','task_summary','status','task_owner','date'],[$_POST['categories'],$_POST['user_story'],$_POST['task_id'],$_POST['task_summary'],$_POST['status'],$_SESSION['name'],date("Y-m-d")],'team_task');
 						header('Location: status_sheet.php');
 					}
 					?>
 				</fieldset>
 			</div>
 			<div id = 'sec2' style='float: left; width: 65%'>
-			<fieldset><b>Team Task Status:</b>
+			<fieldset><b>Team Task Status: ( <a href="edit_task.php?member=<?php echo $_SESSION['name'] ?>">Edit My Task </a> )</b>	
 				<table border=1 align='center'>
-					<tr align='center'><td>User Story</td><td>Task Number</td><td>Task Summary</td><td>Status</td><tr>
+					<tr align='center'><td><b>User Story</b></td><td><b>Task Number</b></td><td><b>Task Summary</b></td><td><b>Status</b></td><tr>
 					<?php
-						$row = select_all('team_task',['category','Dev-Ops',]);
+						function print_row($row){
+							for($n=0;$n<sizeof($row);$n++){
+								$detail = $row[$n];
+								if($detail['date']==date("Y-m-d")){
+									echo "<tr align='center'><td>".$detail['user_story']."</td><td>".$detail['task_id']."</td>";
+									echo "<td align='left'>".$detail['task_summary']."</td><td>[".$detail['status']."]</td></tr>";
+								}
+								else{
+									echo  "<tr><td align='center' colspan=4><b>No Task Data available yet</b></td></tr>";
+								}
+							}
+						}
+						/*
+						---------------------------------------------------------------------------------------------------------------------------------------
+																		Section for Dev-Ops
+						---------------------------------------------------------------------------------------------------------------------------------------
+						*/
+						$row = select_all('team_task',['category','Dev-Ops']);
 						if(sizeof($row)>0){
-					?>
-					<tr><td align='center' colspan=4><b>Dev-Ops</b></td></tr>
-					<?php
-						for($n=0;$n<sizeof($row);$n++){
-							$detail = $row[$n];
-							echo "<tr align='center'><td>".$detail['user_story']."</td><td>".$detail['task_id']."</td><td align='left'>".$detail['task_summary']."</td><td>[".$detail['status']."]</td></tr>";
+							echo "<tr><td align='center' colspan=4><b>Dev-Ops</b></td></tr>";
+							print_row($row);
 						}
-					?>
-					<?php
+						/*
+						---------------------------------------------------------------------------------------------------------------------------------------
+																		Section for Automation
+						---------------------------------------------------------------------------------------------------------------------------------------
+						*/
+						$row = select_all('team_task',['category','Automation']);
+						if(sizeof($row)>0){
+							echo "<tr><td align='center' colspan=4><b>Automation</b></td></tr>";
+							print_row($row);
 						}
+						/*
+						---------------------------------------------------------------------------------------------------------------------------------------
+																		Section for Functional
+						---------------------------------------------------------------------------------------------------------------------------------------
+						*/
+						$row = select_all('team_task',['category','Functional']);
+						if(sizeof($row)>0){
+							echo "<tr><td align='center' colspan=4><b>Functional</b></td></tr>";
+							print_row($row);
+						}
+						/*
+						---------------------------------------------------------------------------------------------------------------------------------------
+						---------------------------------------------------------End---------------------------------------------------------------------------
+						---------------------------------------------------------------------------------------------------------------------------------------
+						*/
 					?>
-					<tr><td align='center' colspan=4><b>Automation</b></td></tr>
-					<tr>
-						<td>-</td><td>-</td><td>-</td><td>-</td>
-					</tr>
-					<tr><td align='center' colspan=4><b>Functional</b></td></tr>
-					<tr>
-						<td>-</td><td>-</td><td>-</td><td>-</td>
-					</tr>
 				</table>
 			</fieldset>
 			</div>

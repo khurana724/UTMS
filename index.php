@@ -26,6 +26,7 @@
 				$detail = $row[$n];
 				if(($detail['username']==$_POST['username']) && ($detail['password']==$_POST['password'])){
 					$_SESSION['name'] = $detail['member_name'];
+					$_SESSION['user'] = $detail['username'];
 					header('Location: home.php');
 				}
 			}
