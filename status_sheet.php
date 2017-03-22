@@ -70,7 +70,7 @@ include 'config.inc';
 				</fieldset>
 			</div>
 			<div id = 'sec2' style='float: left; width: 65%'>
-			<fieldset><b>Team Task Status: ( <a href="edit_task.php?member=<?php echo $_SESSION['name'] ?>">Edit My Task </a> )</b>	
+			<fieldset><b>Team Task Status: ( <a href="edit_task.php?member=<?php echo $_SESSION['name'] ?>">Edit My Task</a> )</b>	
 				<table border=1 align='center'>
 					<tr align='center'><td><b>User Story</b></td><td><b>Task Number</b></td><td><b>Task Summary</b></td><td><b>Status</b></td><tr>
 					<?php

@@ -69,7 +69,7 @@ include 'config.inc';
 				if(isset($_POST['categories0'])){
 					for($n=0;$n<sizeof($row);$n++){
 						$where_clause = ['task_owner',$_GET['member'],'user_story',$row[$n]['user_story'],'date',date("Y-m-d"),'task_id',$row[$n]['task_id']];
-						update(['category','user_story','task_id','task_summary'],[$_POST['categories'.$n],$_POST['user_story'.$n],$_POST['task_id'.$n],$_POST['task_summary'.$n]],'team_task',$where_clause);
+						update(['category','user_story','task_id','task_summary','status'],[$_POST['categories'.$n],$_POST['user_story'.$n],$_POST['task_id'.$n],$_POST['task_summary'.$n],$_POST['status'.$n]],'team_task',$where_clause);
 					}
 					echo "Navigating to Status Sheet";
 					header('Location: status_sheet.php');

@@ -44,7 +44,7 @@
 			if($i==0){
 				$where_string = "`".$where_clause[$i]."`='".$where_clause[$i+1]."'";
 			}
-			if(sizeof($where_clause) > 1 && $i<sizeof($where_clause)){
+			if(sizeof($where_clause) > 1 && $i<sizeof($where_clause) && $i!=0){
 				$where_string = $where_string." ".$where_condition." `".$where_clause[$i]."`='".$where_clause[$i+1]."'";
 			}
 		}
@@ -95,7 +95,6 @@
 			$where_string = resolve_where_clause($where_clause, $where_condition);
 			$query = $query." WHERE ".$where_string;
 		}
-		echo $query;
-		//mysql_query($query) or DIE(mysql_error());
+		mysql_query($query) or DIE(mysql_error());
 	}
 ?>
