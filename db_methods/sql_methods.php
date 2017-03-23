@@ -1,4 +1,17 @@
 <?php
+	function resolve_where_clause($where_clause, $where_condition){
+		$where_string='';
+		for($i=0;$i<sizeof($where_clause);$i=$i+2){
+			if($i==0){
+				$where_string = "`".$where_clause[$i]."`='".$where_clause[$i+1]."'";
+			}
+			if(sizeof($where_clause) > 1 && $i<sizeof($where_clause) && $i!=0){
+				$where_string = $where_string." ".$where_condition." `".$where_clause[$i]."`='".$where_clause[$i+1]."'";
+			}
+		}
+		return $where_string;
+	}
+	
 	function select_all($table_name,$where_clause=[],$where_condition='AND'){
 		$query = "SELECT * FROM `".$table_name."`";
 		$where_string = '';
@@ -36,19 +49,6 @@
 			array_push($result_array, $row);
 		}
 		return $result_array;
-	}
-	
-	function resolve_where_clause($where_clause, $where_condition){
-		$where_string='';
-		for($i=0;$i<sizeof($where_clause);$i=$i+2){
-			if($i==0){
-				$where_string = "`".$where_clause[$i]."`='".$where_clause[$i+1]."'";
-			}
-			if(sizeof($where_clause) > 1 && $i<sizeof($where_clause) && $i!=0){
-				$where_string = $where_string." ".$where_condition." `".$where_clause[$i]."`='".$where_clause[$i+1]."'";
-			}
-		}
-		return $where_string;
 	}
 	
 	function insert($fields=[],$values=[],$table_name){
@@ -95,6 +95,16 @@
 			$where_string = resolve_where_clause($where_clause, $where_condition);
 			$query = $query." WHERE ".$where_string;
 		}
+		mysql_query($query) or DIE(mysql_error());
+	}
+	
+	function delete_fields($table_name,$where_clause=[],$where_condition='AND'){
+		if($where_clause==[]){
+			DIE("WHERE Clause cannot be empty for a DELETE statement");
+		}
+		$query = "DELETE FROM `$table_name`";
+		$where_string = resolve_where_clause($where_clause, $where_condition);
+		$query = $query." WHERE ".$where_string;
 		mysql_query($query) or DIE(mysql_error());
 	}
 ?>
