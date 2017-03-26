@@ -47,7 +47,7 @@ def select_fields(table_name, fields = [], where_clause = [], where_condition = 
 	end
 	result_array = []
 	$db_client.query(db_query).each do |row|
-	  result_array << row
+		result_array << row
 	end
 	result_array
 end

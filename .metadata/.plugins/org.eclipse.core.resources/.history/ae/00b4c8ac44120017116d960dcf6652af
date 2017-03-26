@@ -8,7 +8,7 @@ def resolve_where_clause(where_clause = [], where_condition = 'AND')
 	where_clause.each do |where|
 		where_string = "`#{where_clause[index]}`='#{where_clause[index + 1]}'" if index == 0
 		index += 2
-		if  where_clause.size > 1 && index < where_clause.size && index != 0
+		if(where_clause.size > 1 && index < where_clause.size && index != 0)
 			where_string = "#{where_string} #{where_condition} `#{where_clause[index]}`='#{where_clause[index + 1]}'"
 		end
 		break if index == where_clause.size
@@ -33,9 +33,9 @@ end
 def select_fields(table_name, fields = [], where_clause = [], where_condition = 'AND')
 	select_string = ""
 	fields.each_with_index do |field, index|
-		if index < fields.size && index != fields.size-1
+		if(index < fields.size && index != fields.size-1)
 			select_string = "#{select_string}`#{field}`,"
-		elsif index >= fields.size-1
+		elsif(index >= fields.size-1)
 			select_string = "#{select_string}`#{field}`"
 		end
 	end
@@ -47,33 +47,29 @@ def select_fields(table_name, fields = [], where_clause = [], where_condition = 
 	end
 	result_array = []
 	$db_client.query(db_query).each do |row|
-	  result_array << row
+		result_array << row
 	end
 	result_array
 end
 
 def insert(table_name, fields = [], values = [])
-  field_string = ''
-  value_string = ''
+  field_string, value_string = '', ''
   unless fields.size == values.size
     warn 'Inconsistent Field and Values. Please check your query'
     abort
   end
   fields.each_with_index do |field, index|
-    if index < fields.size && index != fields.size - 1
+    if(index < fields.size && index != fields.size-1)
       field_string = "#{field_string}`#{field}`,"
-    elsif index >= fields.size - 1
+    elsif(index >= fields.size-1)
       field_string = "#{field_string}`#{field}`"
     end
   end
   values.each_with_index do |value, index|
-    if index < values.size && index != values.size - 1
-      value_string = "#{value_string}`#{value}`,"
-    elsif index >= values.size - 1
-      value_string = "#{value_string}`#{value}`"
+    if(index < values.size && index != values.size-1)
+      field_string = "#{field_string}`#{field}`,"
+    elsif(index >= values.size-1)
+      field_string = "#{field_string}`#{field}`"
     end
   end
-  db_query = "INSERT INTO `#{table_name}` (#{field_string}) VALUES (#{value_string})"
-  puts db_query
-  $db_client.query(db_query)
 end
