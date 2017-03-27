@@ -3,7 +3,7 @@ require "pry"
 
 $db_client = Mysql2::Client.new(:host => "localhost", :username => "root", :database=> "utms")
 
-def resolve_where_clause(where_clause = [], where_condition = 'AND')
+def resolve_where_clause(db_query, where_clause = [], where_condition = 'AND')
   where_string='', index = 0
   where_clause.each do |where|
     where_string = "`#{where_clause[index]}`='#{where_clause[index + 1]}'" if index == 0
@@ -13,16 +13,12 @@ def resolve_where_clause(where_clause = [], where_condition = 'AND')
     end
     break if index == where_clause.size
   end
-  where_string
+  return "#{db_query} WHERE #{where_string}"
 end
 
 def select_all(table_name, where_clause = [], where_condition = 'AND')
   db_query = "SELECT * FROM `#{table_name}`"
-  where_string = ''
-  unless where_clause == []
-    where_string = resolve_where_clause(where_clause, where_condition)
-    db_query = "#{db_query} WHERE #{where_string}"
-  end
+  db_query = resolve_where_clause(db_query, where_clause, where_condition) unless where_clause == []
   result_array = []
   $db_client.query(db_query).each do |row|
     result_array << row
@@ -40,11 +36,7 @@ def select_fields(table_name, fields = [], where_clause = [], where_condition = 
     end
   end
   db_query = "SELECT #{select_string} FROM `#{table_name}`"
-  where_string = ''
-  unless where_clause == []
-    where_string = resolve_where_clause(where_clause, where_condition)
-    db_query = "#{db_query} WHERE #{where_string}"
-  end
+  db_query = resolve_where_clause(db_query, where_clause, where_condition) unless where_clause == []
   result_array = []
   $db_client.query(db_query).each do |row|
     result_array << row
@@ -91,11 +83,7 @@ def update(table_name, fields = [], values = [], where_clause = [], where_condit
     end
   end
   db_query = "UPDATE `#{table_name}` SET #{update_string}";
-  where_string = '';
-  unless where_clause == []
-    where_string = resolve_where_clause(where_clause, where_condition);
-    db_query = "#{db_query} WHERE #{where_string}"
-  end
+  db_query = resolve_where_clause(db_query, where_clause, where_condition) unless where_clause == []
   $db_client.query(db_query)
 end
 
@@ -105,7 +93,6 @@ def delete_fields(table_name,where_clause=[],where_condition='AND')
     abort
   end
   db_query = "DELETE FROM `#{table_name}`"
-  where_string = resolve_where_clause(where_clause, where_condition);
-  db_query = "#{db_query} WHERE #{where_string}"
+  db_query = resolve_where_clause(db_query, where_clause, where_condition)
   $db_client.query(db_query)
 end
